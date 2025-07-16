@@ -1,0 +1,18 @@
+name: 'Install Trivy CLI'
+description: Install Trivy CLI on GitHub or Gitea Actions
+branding:
+  icon: 'download'
+  color: 'blue'
+inputs:
+  trivy-version:
+    description: 'Version to install (e.g. "v0.64.0" or "latest")'
+    required: false
+    default: 'latest'
+runs:
+  using: composite
+  steps:
+    - name: Install Trivy CLI
+      shell: bash
+      env:
+        TRIVY_VERSION: ${{ inputs.trivy-version }}
+      run: "$GITHUB_ACTION_PATH/scripts/install-trivy-cli.sh"

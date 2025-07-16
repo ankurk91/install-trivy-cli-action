@@ -1,0 +1,55 @@
+name: tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 16 * *'
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  without-default-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Execute this action
+        uses: ./
+
+      - run: trivy --version
+
+  with-specific-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Execute this action
+        uses: ./
+        with:
+          trivy-version: 'v0.64.0'
+
+      - run: trivy --version
+
+  with-latest-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Execute this action
+        uses: ./
+        with:
+          trivy-version: 'latest'
+
+      - run: trivy --version
