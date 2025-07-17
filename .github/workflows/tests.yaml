@@ -14,7 +14,7 @@ on:
       - dev
 
 jobs:
-  without-default-version:
+  with-default-options:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -30,19 +30,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Execute this action
-        uses: ./
-        with:
-          trivy-version: 'v0.64.0'
-
-      - run: trivy --version
-
-  with-latest-version:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        cache: [ true, false ]
 
     steps:
       - uses: actions/checkout@v4
@@ -50,6 +41,8 @@ jobs:
       - name: Execute this action
         uses: ./
         with:
-          trivy-version: 'latest'
+          version: 'v0.64.0'
+          cache: ${{ matrix.cache }}
 
       - run: trivy --version
+

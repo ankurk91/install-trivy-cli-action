@@ -4,15 +4,30 @@ branding:
   icon: 'download'
   color: 'blue'
 inputs:
-  trivy-version:
+  version:
     description: 'Version to install (e.g. "v0.64.0" or "latest")'
     required: false
     default: 'latest'
+  cache:
+    description: 'Cache the downloaded binary'
+    required: false
+    default: 'true'
 runs:
   using: composite
   steps:
+    - name: Cache or Restore the binary
+      if: ${{ inputs.cache == 'true' && inputs.version != 'latest' }}
+      uses: actions/cache@v4
+      id: trivy-cli-cache
+      with:
+        path: $HOME/.cache/trivy-cli/*
+        key: ${{ runner.os }}-${{ runner.arch }}-trivy-cli-${{ inputs.version }}
+
     - name: Install Trivy CLI
       shell: bash
       env:
-        TRIVY_VERSION: ${{ inputs.trivy-version }}
+        TRIVY_VERSION: ${{ inputs.version }}
+        CACHE_HIT: ${{ steps.trivy-cli-cache.outputs.cache-hit == 'true' }}
+        CACHE_ENABLED: ${{ inputs.cache == 'true'}}
+        CACHE_PATH: $HOME/.cache/trivy-cli
       run: "$GITHUB_ACTION_PATH/scripts/install-trivy-cli.sh"
