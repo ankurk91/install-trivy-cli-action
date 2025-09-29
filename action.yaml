@@ -1,17 +1,17 @@
-name: 'Install Trivy CLI'
+name: Install Trivy CLI
 description: Install Trivy CLI on GitHub or Gitea Actions
 branding:
-  icon: 'download'
-  color: 'blue'
+  icon: download
+  color: blue
 inputs:
   version:
-    description: 'Version to install (e.g. "v0.64.0" or "latest")'
+    description: Version to install (e.g. "v0.64.0" or "latest")
     required: false
-    default: 'latest'
+    default: latest
   cache:
-    description: 'Cache the downloaded binary'
+    description: Cache the downloaded binary
     required: false
-    default: 'true'
+    default: true
 runs:
   using: composite
   steps:
