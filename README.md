@@ -38,7 +38,7 @@ jobs:
 
 | Name      | Required | Default  | Description                                     |
 |-----------|----------|----------|-------------------------------------------------|
-| `version` | No       | `latest` | Version to install (e.g. `v0.64.0` or `latest`) |
+| `version` | No       | `latest` | Version to install (e.g. `v0.70.0` or `latest`) |
 | `cache`   | No       | `true`   | Whether to cache the downloaded binary          |
 
 ### Must read

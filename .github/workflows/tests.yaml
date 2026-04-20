@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Execute this action
         uses: ./
@@ -36,12 +36,12 @@ jobs:
         cache: [ true, false ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Execute this action
         uses: ./
         with:
-          version: 'v0.64.0'
+          version: 'v0.70.0'
           cache: ${{ matrix.cache }}
 
       - run: trivy --version
