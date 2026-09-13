@@ -27,7 +27,7 @@ install_cli() {
   echo "Installing..."
   chmod +x "$CACHE_PATH/trivy"
   # We have to leave the binary here in cache folder so that it can be saved in GitHub actions cache
-  cp --force "$CACHE_PATH/trivy" $BIN_PATH
+  cp -f "$CACHE_PATH/trivy" $BIN_PATH
 }
 
 if [ "$TRIVY_VERSION" = "latest" ]; then
