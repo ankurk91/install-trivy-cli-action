@@ -7,10 +7,10 @@ Action to Install [Trivy](https://github.com/aquasecurity/trivy) CLI
 
 ### Features
 
-* Allow to specify a version to install
-* Cache and restore the downloaded binary
-* Tested on GitHub and Gitea Actions
-* Tested on Ubuntu runner and should work on `X86_64` and `arm64`
+* Pin an exact version, or always install the `latest` one
+* Caches the binary between runs, keyed by version, operating system and architecture
+* Runs on both GitHub and Gitea Actions
+* Tested on Ubuntu runners, and should work on `X86_64` and `arm64`
 
 ### Usage
 

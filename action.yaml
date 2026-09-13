@@ -1,21 +1,24 @@
 name: Install Trivy CLI
-description: Install Trivy CLI on GitHub or Gitea Actions
+description: Installs the Trivy CLI on GitHub and Gitea Actions runners
+author: ankurk91
 branding:
   icon: download
   color: blue
+
 inputs:
   version:
-    description: Version to install (e.g. "v0.70.0" or "latest")
+    description: The version to install, either "latest" or a tag such as "v0.70.0"
     required: false
     default: latest
   cache:
-    description: Cache the downloaded binary
+    description: Whether to cache the downloaded binary, ignored when version is "latest"
     required: false
     default: true
+
 runs:
   using: composite
   steps:
-    - name: Cache or Restore the binary
+    - name: Restore the binary from the cache
       if: ${{ inputs.cache == 'true' && inputs.version != 'latest' }}
       uses: actions/cache@v6
       id: trivy-cli-cache

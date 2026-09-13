@@ -31,9 +31,16 @@ jobs:
       - name: Execute this action
         uses: ./
 
-      - run: trivy --version
+      - name: Assert that trivy is on PATH and executable
+        run: |
+          test -x "$(command -v trivy)"
 
-      - name: Ensure the workspace was not polluted
+      - name: Assert that trivy reports a version
+        run: |
+          trivy --version
+          trivy --version | grep -Eq '[0-9]+\.[0-9]+\.[0-9]+'
+
+      - name: Assert that the workspace was left clean
         run: |
           git status --porcelain
           test -z "$(git status --porcelain)"
@@ -47,18 +54,28 @@ jobs:
       matrix:
         cache: [ true, false ]
 
+    env:
+      EXPECTED_VERSION: v0.70.0
+
     steps:
       - uses: actions/checkout@v7
 
       - name: Execute this action
         uses: ./
         with:
-          version: 'v0.70.0'
+          version: ${{ env.EXPECTED_VERSION }}
           cache: ${{ matrix.cache }}
 
-      - run: trivy --version
+      - name: Assert that the requested version was installed
+        run: |
+          trivy --version
+          trivy --version | grep -Fq "${EXPECTED_VERSION#v}"
 
-      - name: Ensure the workspace was not polluted
+      - name: Assert that the binary is kept in the cache directory
+        run: |
+          test -x "$HOME/.cache/trivy-cli/trivy"
+
+      - name: Assert that the workspace was left clean
         run: |
           git status --porcelain
           test -z "$(git status --porcelain)"
@@ -83,5 +100,10 @@ jobs:
           version: ${{ matrix.version }}
           cache: false
 
-      - name: Ensure the action rejected the version
-        run: test "${{ steps.install.outcome }}" = "failure"
+      - name: Assert that the action rejected the version
+        run: |
+          test "${{ steps.install.outcome }}" = "failure"
+
+      - name: Assert that nothing was downloaded
+        run: |
+          test ! -e "$HOME/.cache/trivy-cli/trivy"
