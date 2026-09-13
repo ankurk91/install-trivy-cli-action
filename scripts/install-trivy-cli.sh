@@ -2,11 +2,14 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Must be computed here: the `path:` given to actions/cache is not shell-expanded,
+# so it uses '~' while we expand $HOME to the very same directory.
+CACHE_PATH="$HOME/.cache/trivy-cli"
+BIN_PATH="/usr/local/bin"
+
 echo "::debug::CACHE_ENABLED=$CACHE_ENABLED"
 echo "::debug::CACHE_HIT=$CACHE_HIT"
 echo "::debug::CACHE_PATH=$CACHE_PATH"
-
-BIN_PATH="/usr/local/bin"
 
 download_cli() {
   echo "Downloading Trivy CLI: $TRIVY_VERSION"
@@ -15,12 +18,12 @@ download_cli() {
 
   REMOTE_URL="https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh"
 
-    curl -sfL \
-      --retry 3 \
-      --retry-delay 5 \
-      --connect-timeout 15 \
-      --max-time 60 \
-      "$REMOTE_URL" | sh -s -- -b "$CACHE_PATH" "$TRIVY_VERSION"
+  curl -sfL \
+    --retry 3 \
+    --retry-delay 5 \
+    --connect-timeout 15 \
+    --max-time 60 \
+    "$REMOTE_URL" | sh -s -- -b "$CACHE_PATH" "$TRIVY_VERSION"
 }
 
 install_cli() {

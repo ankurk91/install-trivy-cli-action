@@ -30,6 +30,11 @@ jobs:
 
       - run: trivy --version
 
+      - name: Ensure the workspace was not polluted
+        run: |
+          git status --porcelain
+          test -z "$(git status --porcelain)"
+
   with-specific-version:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -49,4 +54,9 @@ jobs:
           cache: ${{ matrix.cache }}
 
       - run: trivy --version
+
+      - name: Ensure the workspace was not polluted
+        run: |
+          git status --porcelain
+          test -z "$(git status --porcelain)"
 

@@ -20,7 +20,8 @@ runs:
       uses: actions/cache@v6
       id: trivy-cli-cache
       with:
-        path: $HOME/.cache/trivy-cli/*
+        # actions/cache expands '~' but NOT environment variables like $HOME
+        path: ~/.cache/trivy-cli
         key: ${{ runner.os }}-${{ runner.arch }}-trivy-cli-${{ inputs.version }}
 
     - name: Install Trivy CLI
@@ -28,6 +29,5 @@ runs:
       env:
         TRIVY_VERSION: ${{ inputs.version }}
         CACHE_HIT: ${{ steps.trivy-cli-cache.outputs.cache-hit == 'true' }}
-        CACHE_ENABLED: ${{ inputs.cache == 'true'}}
-        CACHE_PATH: $HOME/.cache/trivy-cli
+        CACHE_ENABLED: ${{ inputs.cache == 'true' }}
       run: "$GITHUB_ACTION_PATH/scripts/install-trivy-cli.sh"
