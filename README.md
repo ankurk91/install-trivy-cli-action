@@ -27,7 +27,7 @@ jobs:
       - name: Install Trivy CLI
         uses: ankurk91/install-trivy-cli-action@v2
         with:
-          version: latest # or a specific version like 'v0.64.0'
+          version: latest # or a specific version like 'v0.70.0'
           cache: true # or set to false, true by default
 
       - name: Run Trivy scan
