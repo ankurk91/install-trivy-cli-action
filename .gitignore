@@ -1,7 +1,22 @@
+# Editors / IDEs
 .idea/
 .vscode/
-*.log
-.env
 *.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Secrets / local env
+.env
+.env.*
+!.env.example
 *.pem
+
+# Local tooling
 .act/
+*.secrets
