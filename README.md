@@ -44,7 +44,7 @@ jobs:
 ### Must read
 
 > [!TIP]
-> The version must be a valid tag, and usually start with `v`
+> The version must be `latest` or a valid tag like `v0.70.0`, the leading `v` is required.
 
 > [!IMPORTANT]
 > Cache will not work with `latest` version as this is intended to download latest version always.

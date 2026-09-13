@@ -63,3 +63,25 @@ jobs:
           git status --porcelain
           test -z "$(git status --porcelain)"
 
+  with-invalid-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [ '0.70.0', 'v0.70', 'nightly' ]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Execute this action
+        id: install
+        continue-on-error: true
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          cache: false
+
+      - name: Ensure the action rejected the version
+        run: test "${{ steps.install.outcome }}" = "failure"

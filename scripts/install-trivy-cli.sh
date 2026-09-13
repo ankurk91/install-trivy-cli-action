@@ -11,6 +11,16 @@ echo "::debug::CACHE_ENABLED=$CACHE_ENABLED"
 echo "::debug::CACHE_HIT=$CACHE_HIT"
 echo "::debug::CACHE_PATH=$CACHE_PATH"
 
+validate_version() {
+  # grep without -q reads all input, so pipefail cannot trip on a closed pipe
+  matched="$(printf '%s' "$TRIVY_VERSION" | grep -E '^(latest|v[0-9]+\.[0-9]+\.[0-9]+)$' || true)"
+
+  if [ -z "$matched" ]; then
+    echo "::error::Invalid version '$TRIVY_VERSION', expected 'latest' or a tag like 'v0.70.0' (note the leading 'v')"
+    exit 1
+  fi
+}
+
 download_cli() {
   echo "Downloading Trivy CLI: $TRIVY_VERSION"
 
@@ -32,6 +42,8 @@ install_cli() {
   # We have to leave the binary here in cache folder so that it can be saved in GitHub actions cache
   cp -f "$CACHE_PATH/trivy" $BIN_PATH
 }
+
+validate_version
 
 if [ "$TRIVY_VERSION" = "latest" ]; then
   echo "Skipping cache for 'latest' version"
